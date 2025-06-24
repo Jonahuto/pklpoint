@@ -1,0 +1,148 @@
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #111;
+    background: linear-gradient(to Bottom, #4A90E2 0%, #294F7C 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+a {
+    color: #2736FF;
+    text-decoration: none;
+    font-weight: 600;
+}
+a:hover,
+a:focus {
+    text-decoration: underline;
+}
+/* Header */
+header {
+    padding: 32px 16px 24px;
+    text-align: center;
+    background: transparent;
+    font-size: 3.5rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+}
+
+/* Main Section Styles */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(90vh - 80px); /* Full height minus header */
+}
+
+/* Registration Card Styles */
+.register-card {
+    background: rgba(255 255 255 / 0.88);
+    padding: 30px 32px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.register-card h2 {
+    font-weight: 700;
+    margin-bottom: 32px;
+    font-size: 1.75rem;
+    color: #111;
+    text-align: center;
+}
+
+/* Form Styles */
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 14px 18px;
+    font-size: 1rem;
+    border: 1px solid #888;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.register-form input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.register-form input:focus {
+    border-color: #4a90e2; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Button Styles */
+button {
+    background-color: #4a90e2; /* Button color */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #357ab8; /* Darker shade on hover */
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 14px 18px;
+    font-size: 1rem;
+    border: 1px solid #888;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #2736FF;
+    box-shadow: 0 0 8px #5D74D3;
+}
+
+.signup-text a {
+    font-weight: 600;
+    color: #2736FF;
+}
+
+/* Signup Text Styles */
+.signup-text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Submit button */
+button[type="submit"] {
+    margin-top: 8px;
+    padding: 14px 0;
+    background-color: #2736FF;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover,
+button[type="submit"]:focus {
+    background-color: #1a22d5;
+    outline: none;
+}

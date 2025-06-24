@@ -1,0 +1,438 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #e6f0fa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 25px;
+    overflow-y: auto;
+    /* biar bisa discroll kalau isi banyak */
+    z-index: 1000;
+    /* supaya di atas elemen lain */
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 95vh;
+    /* penuh tinggi layar */
+    width: 250px;
+    /* atau ukuran sesuai kebutuhan */
+}
+
+
+.logo .material-icons {
+    margin-right: 10px;
+    font-size: 40px;
+}
+
+.logo a {
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: bold;
+    color: #1A22D5;
+    display: inline-flex;
+    align-items: center;
+    margin: 20px;
+
+}
+
+nav svg {
+    padding-right: 5px;
+}
+
+nav a {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 25px;
+}
+
+nav a:hover{
+    background-color: #859CFF;
+    color: #FFFFFF;
+    align-items: center;
+}
+nav a:hover svg{
+    fill: #FFFFFF;
+}
+
+nav a.active {
+    background-color: #859CFF;
+    font-weight: bold;
+    color: #FFFFFF;
+    align-items: center;
+}
+
+nav a.active svg {
+    fill: #FFFFFF;
+}
+
+.icon {
+    margin-right: 10px;
+}
+
+hr.separator {
+    height: 0.1px;
+    width: calc(100% + 40px);
+    border: none;
+    background-color: rgb(0, 0, 0);
+    margin: 20px -20px;
+}
+
+
+.online-profile {
+    margin-top: auto;
+    font-size: 20px;
+    padding: 10px;
+}
+
+p {
+    margin: 0px;
+}
+
+a.logout {
+    order: 1;
+}
+
+.logout {
+    color: #F0080C;
+    text-decoration: none;
+    display: flex;
+    padding: 10px;
+    width: 70%;
+    border-radius: 5px;
+    justify-content: left;
+}
+
+.logout:hover {
+    background-color: #F0080C;
+    color: #ffffff;
+}
+
+.logout:hover .logout-logo {
+    fill: #ffffff;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 289px;
+    /* beri ruang agar tidak tertutup sidebar */
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 76%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 25px;
+}
+
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    border-radius: 25px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropbtn {
+    background-color: #1A22D5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 25px;
+    margin-right: 75px;
+}
+
+.dashboard h2 {
+    margin: 0 0 20px 0;
+    font-size: 30px;
+}
+
+.info-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 40%;
+    font-size: 25px;
+}
+
+.tasks {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 40%;
+}
+
+.tasks ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tasks li {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.check {
+    color: green;
+    margin-right: 10px;
+}
+
+.notification {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    width: 40%;
+}
+
+.notification .icon {
+    margin-right: 10px;
+    color: #ff9800;
+}
+
+.notification-circle {
+    background-color: #ffffff;
+    position: fixed;
+    bottom: 75px;
+    right: 75px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.notification-circle .exclamation {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-list {
+    position: fixed;
+    bottom: 125px;
+    right: 125px;
+    width: 279px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    z-index: 1001;
+}
+
+.notification-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background-color: #f9f9f9;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-card {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    margin-left: 50px;
+    margin-right: 100px;
+    font-size: 20px;
+}
+
+.profile-value {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 18px;
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #1E1E9E;
+    border: none;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #000000;
+    display: flex;
+    align-items: flex-end;
+    margin-right: 100px;
+}
+
+.edit-btn:hover {
+    background-color: #1E1E9E;
+    color: #FFFFFF;
+}
+
+.form{
+    display: flex;
+}
+
+
+.profile-form {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    margin-right: 100px;
+    font-size: 20px;
+    padding: 25px 50px 25px 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-btn {
+    background-color: #230CFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    width: 130px;
+    font-size: 20px;
+}
+
+.cancel-btn {
+    background-color: #F0080C;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    width: 90px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.drpdown-prodi{
+    width: calc(100% + 20px);
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-position: right 10px center;
+  background-size: 10px;
+  transition: border-color 0.3s ease;
+}
