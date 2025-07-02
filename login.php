@@ -54,6 +54,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['nama_lengkap'] = $row['nama_lengkap'];
                     $_SESSION['user_id'] = $row['user_id'];
 
+                    // Update log_aktivitas: set login_time dan status Aktif
+                    $user_id = $row['user_id'];
+                    $now = date('Y-m-d H:i:s');
+
+                    // Cek apakah sudah ada log_aktivitas untuk user ini
+                    $cek_log = "SELECT id FROM log_aktivitas WHERE user_id = ?";
+                    $stmt_cek_log = $conn->prepare($cek_log);
+                    $stmt_cek_log->bind_param("i", $user_id);
+                    $stmt_cek_log->execute();
+                    $stmt_cek_log->store_result();
+
+                    if ($stmt_cek_log->num_rows > 0) {
+                        // Update log lama
+                        $update_log = "UPDATE log_aktivitas SET waktu_masuk = ?, status = 'Aktif', waktu_keluar = NULL WHERE user_id = ?";
+                        $stmt_update = $conn->prepare($update_log);
+                        $stmt_update->bind_param("si", $now, $user_id);
+                        $stmt_update->execute();
+                        $stmt_update->close();
+                    } else {
+                        // Insert log baru (jika belum ada)
+                        $insert_log = "INSERT INTO log_aktivitas (user_id, waktu_masuk, status) VALUES (?, ?, 'Aktif')";
+                        $stmt_insert = $conn->prepare($insert_log);
+                        $stmt_insert->bind_param("is", $user_id, $now);
+                        $stmt_insert->execute();
+                        $stmt_insert->close();
+                    }
+                    $stmt_cek_log->close();
+
                     // Redirect based on role
                     switch ($row['role']) {
                         case 'mahasiswa':
@@ -80,10 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Display error if exists
-if ($error) {
-    echo "<p style='color: red;'>" . htmlspecialchars($error) . "</p>";
-}
 ?>
 
 
@@ -114,7 +138,7 @@ if ($error) {
         <section class="login-card" aria-label="Form login PKLPoint">
             <h2>Login</h2>
             <form class="login-form" action="login.php" method="POST" autocomplete="off" novalidate>
-                <input type="text" name="nim" placeholder="NIM" aria-label="NIM" required />
+                <input type="text" name="nim" placeholder="NIM / NIP" aria-label="NIM" required />
                 <input type="password" name="password" placeholder="Password" aria-label="Password" required />
                 <?php if ($error): ?>
                     <p class="error-message" style="color: red;"><?php echo $error; ?></p>

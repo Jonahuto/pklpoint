@@ -18,6 +18,18 @@ body {
     flex-direction: column;
     align-items: flex-start;
     font-size: 25px;
+    overflow-y: auto;
+    /* biar bisa discroll kalau isi banyak */
+    z-index: 1000;
+    /* supaya di atas elemen lain */
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 95vh;
+    /* penuh tinggi layar */
+    width: 250px;
+    /* atau ukuran sesuai kebutuhan */
 }
 
 
@@ -25,13 +37,14 @@ body {
     margin-right: 10px;
     font-size: 40px;
 }
-.logo a{
+
+.logo a {
     text-decoration: none;
     font-size: 30px;
     font-weight: bold;
     color: #1A22D5;
     display: inline-flex;
-    align-items: center;    
+    align-items: center;
     margin: 20px;
 
 }
@@ -68,7 +81,8 @@ nav a.active {
     color: #FFFFFF;
     align-items: center;
 }
-nav a.active svg{
+
+nav a.active svg {
     fill: #FFFFFF;
 }
 
@@ -85,8 +99,8 @@ hr.separator {
 }
 
 
-.online-profile{
-    margin-top:auto;
+.online-profile {
+    margin-top: auto;
     font-size: 20px;
     padding: 10px;
 }
@@ -95,7 +109,7 @@ p {
     margin: 0px;
 }
 
-a.logout{
+a.logout {
     order: 1;
 }
 
@@ -120,6 +134,9 @@ a.logout{
 
 .main-content {
     flex-grow: 1;
+    padding: 20px;
+    margin-left: 289px;
+    /* beri ruang agar tidak tertutup sidebar */
     padding: 20px;
 }
 
@@ -172,8 +189,6 @@ header {
     margin-right: 75px;
 }
 
-
-
 .dashboard h2 {
     margin: 0 0 20px 0;
     font-size: 30px;
@@ -196,7 +211,6 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     width: 40%;
-
 }
 
 .tasks ul {
@@ -204,26 +218,15 @@ header {
     padding: 0;
 }
 
-.tasks li a{
+.tasks li {
     display: flex;
     align-items: center;
     margin: 10px 0;
-        text-decoration: none;
-    color: #000000;
-}
-
-.tasks li svg{
-    margin-right: 10px;
 }
 
 .check {
     color: green;
     margin-right: 10px;
-}
-
-.notification-wrapper{
-    position: relative; 
-    display: inline-block;
 }
 
 .notification {
@@ -234,17 +237,47 @@ header {
     cursor: pointer;
 }
 
-
 .notification .icon {
     margin-right: 10px;
     color: #ff9800;
 }
 
-.notification-list {
+.notification-circle {
+    background-color: #ffffff;
+    position: fixed;
+    bottom: 75px;
+    right: 75px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.notification-circle .exclamation {
     position: absolute;
-    right: 50%; 
-    margin-right: 10px; 
-    width: 400px;
+    top: 0px;
+    left: 0px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-list {
+    position: fixed;
+    right: 455px;
+    width: 30%;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -255,37 +288,107 @@ header {
     z-index: 1001;
 }
 
-.notification-header{
-    padding: 15px;
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
 .notification-item {
-    background-color: #ffffff;
-    padding: 15px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
-    border-radius: 8px;
-    margin: 10px 25px 20px 25px;
-}
-
-.notif-title {
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.notif-message {
-    font-style: italic;
-    color: #444;
-    margin-bottom: 8px;
-}
-
-.notif-time {
-    font-size: 14px;
-    color: #777;
+    cursor: pointer;
 }
 
 .notification-item:hover {
     background-color: #f9f9f9;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-card {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    margin-left: 50px;
+    margin-right: 100px;
+    font-size: 20px;
+}
+
+.profile-value {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 18px;
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #1E1E9E;
+    border: none;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #000000;
+    display: flex;
+    align-items: flex-end;
+    margin-right: 100px;
+}
+
+.edit-btn:hover {
+    background-color: #1E1E9E;
+    color: #FFFFFF;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    padding: 20px 30px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    opacity: 1;
+    animation: fadeIn 0.4s ease-out;
+    font-size: 18px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.popup.success {
+    background-color: #28a745; /* Hijau */
+}
+
+.popup.error {
+    background-color: #dc3545; /* Merah */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
 }

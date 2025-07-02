@@ -13,23 +13,33 @@ if ($_SESSION['role'] !== 'mahasiswa') {
     echo "Akses ditolak. Halaman ini hanya untuk mahasiswa.";
     exit();
 }
-
-// Ambil data dari database
-$perusahaan = $data['nama_perusahaan'] ?? '';
-$tanggal_mulai = $data['tanggal_mulai'] ?? '';
-$tanggal_selesai = $data['tanggal_selesai'] ?? '';
-$pembimbing = $data['pembimbing'] ?? '';
-
-// Cek jika kosong, tampilkan "-"
-$perusahaan = !empty($perusahaan) ? $perusahaan : '-';
-$periode = (!empty($tanggal_mulai) && !empty($tanggal_selesai)) ? date('F Y', strtotime($tanggal_mulai)) . ' - ' . date('F Y', strtotime($tanggal_selesai)) : '-';
-$pembimbing = !empty($pembimbing) ? $pembimbing : '-';
-
 $user_id = $_SESSION['user_id'];
 $query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
 $user = $query->fetch_assoc();
 $query = $conn->query("SELECT * FROM pkl_data WHERE user_id = $user_id");
 $pkl_data = $query->fetch_assoc();
+// Ambil data dari database
+$perusahaan = $pkl_data['nama_perusahaan'] ?? '';
+$tanggal_mulai = $pkl_data['tanggal_mulai'] ?? '';
+$tanggal_selesai = $pkl_data['tanggal_selesai'] ?? '';
+$pembimbing = $pkl_data['pembimbing'] ?? '';
+$pembimbing_id = $pkl_data['pembimbing'] ?? null;
+if (!empty($pembimbing_id)) {
+    $result_pembimbing = $conn->query("SELECT nama_lengkap FROM users WHERE user_id = $pembimbing_id AND role = 'dosen'");
+    if ($result_pembimbing && $result_pembimbing->num_rows > 0) {
+        $row = $result_pembimbing->fetch_assoc();
+        $nama_pembimbing = $row['nama_lengkap'];
+    }
+}
+// Cek jika kosong, tampilkan "-"
+$perusahaan = !empty($perusahaan) ? $perusahaan : '-';
+$periode = (!empty($tanggal_mulai) && !empty($tanggal_selesai)) ? date('F Y', strtotime($tanggal_mulai)) . ' - ' . date('F Y', strtotime($tanggal_selesai)) : '-';
+$pembimbing = !empty($pembimbing) ? $pembimbing : '-';
+
+
+
+$sql = "SELECT * FROM laporan_akhir WHERE id_user = $user_id ORDER BY tanggal DESC LIMIT 1";
+$result = $conn->query($sql);
 ?>
 
 
@@ -84,6 +94,34 @@ $pkl_data = $query->fetch_assoc();
         </aside>
         <main class="main-content">
             <header>
+                <div class="notification-wrapper">
+                    <div class="notification" onclick="toggleNotificationList()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 512 512">
+                            <path fill="#000" d="M440.08 341.31c-1.66-2-3.29-4-4.89-5.93c-22-26.61-35.31-42.67-35.31-118c0-39-9.33-71-27.72-95c-13.56-17.73-31.89-31.18-56.05-41.12a3 3 0 0 1-.82-.67C306.6 51.49 282.82 32 256 32s-50.59 19.49-59.28 48.56a3.1 3.1 0 0 1-.81.65c-56.38 23.21-83.78 67.74-83.78 136.14c0 75.36-13.29 91.42-35.31 118c-1.6 1.93-3.23 3.89-4.89 5.93a35.16 35.16 0 0 0-4.65 37.62c6.17 13 19.32 21.07 34.33 21.07H410.5c14.94 0 28-8.06 34.19-21a35.17 35.17 0 0 0-4.61-37.66M256 480a80.06 80.06 0 0 0 70.44-42.13a4 4 0 0 0-3.54-5.87H189.12a4 4 0 0 0-3.55 5.87A80.06 80.06 0 0 0 256 480" />
+                        </svg>
+                    </div>
+
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-header">Notifikasi</div>
+
+                        <?php if ($result->num_rows > 0): ?>
+                            <?php $laporan = $result->fetch_assoc(); ?>
+                            <div class="notification-item">
+                                <p class="notif-title">Laporan Akhir Terbaru</p>
+                                <p class="notif-message">
+                                    <i><?php echo htmlspecialchars($laporan['komentar']); ?></i>
+                                </p>
+                                <p class="notif-time"><?php echo date('d F Y, H:i', strtotime($laporan['tanggal_komentar'])); ?></p>
+                            </div>
+                        <?php else: ?>
+                            <div class="notification-item">
+                                <p class="notif-title">Belum Ada Laporan Akhir</p>
+                                <p class="notif-message"><i>Segera upload laporan akhir Anda.</i></p>
+                                <p class="notif-time"><?php echo date('d F Y, H:i'); ?></p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
                 <div class="dropdown">
                     <button class="dropbtn"><?php echo $user['nama_lengkap'] ?> ▼</button>
                     <div class="dropdown-content">
@@ -95,36 +133,42 @@ $pkl_data = $query->fetch_assoc();
                 <hr class="separator">
                 <h2>Selamat datang, <?php echo $user['nama_lengkap'] ?></h2>
                 <div class="info-card">
-                    <p>Perusahaan: <?= htmlspecialchars($perusahaan); ?></p>
-                    <p>Periode: <?= htmlspecialchars($periode); ?></p>
-                    <p>Pembimbing: <?= htmlspecialchars($pembimbing); ?></p>
+                    <p>Perusahaan: <?= ($perusahaan); ?></p>
+                    <p>Periode: <?= ($periode); ?></p>
+                    <p>Pembimbing: <?= ($nama_pembimbing); ?></p>
                 </div>
-                <!-- <div class="tasks">
+                <div class="tasks">
                     <h3>Langkah Berikutnya</h3>
                     <ul>
-                        <li><span class="check">✔</span> Isi Data PKL</li>
-                        <li><span class="icon">📤</span> Upload Kegiatan</li>
-                        <li><span class="icon">📤</span> Upload Kegiatan Akhir</li>
+                        <li>
+                            <div class="langkah-1"><a href="isidata.php">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#000" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z" />
+                                    </svg>
+                                    Isi Data PKL</a></div>
+                        </li>
+                        <li>
+                            <div class="langkah-2"><a href="kegiatan.php"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="#000" stroke-width="1.5">
+                                            <path d="m18.18 8.04l.463-.464a1.966 1.966 0 1 1 2.781 2.78l-.463.464M18.18 8.04s.058.984.927 1.853s1.854.927 1.854.927M18.18 8.04l-4.26 4.26c-.29.288-.434.433-.558.592q-.22.282-.374.606c-.087.182-.151.375-.28.762l-.413 1.24l-.134.401m8.8-5.081l-4.26 4.26c-.29.29-.434.434-.593.558q-.282.22-.606.374c-.182.087-.375.151-.762.28l-1.24.413l-.401.134m0 0l-.401.134a.53.53 0 0 1-.67-.67l.133-.402m.938.938l-.938-.938" />
+                                            <path stroke-linecap="round" d="M8 13h2.5M8 9h6.5M8 17h1.5M19.828 3.172C18.657 2 16.771 2 13 2h-2C7.229 2 5.343 2 4.172 3.172S3 6.229 3 10v4c0 3.771 0 5.657 1.172 6.828S7.229 22 11 22h2c3.771 0 5.657 0 6.828-1.172c.944-.943 1.127-2.348 1.163-4.828" />
+                                        </g>
+                                    </svg> Upload Kegiatan</a></div>
+                        </li>
+                        <li>
+                            <div class="langkah-3"><a href="laporanakhir.php"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#000" d="M6 20q-.825 0-1.412-.587T4 18v-2q0-.425.288-.712T5 15t.713.288T6 16v2h12v-2q0-.425.288-.712T19 15t.713.288T20 16v2q0 .825-.587 1.413T18 20zm5-12.15L9.125 9.725q-.3.3-.712.288T7.7 9.7q-.275-.3-.288-.7t.288-.7l3.6-3.6q.15-.15.325-.212T12 4.425t.375.063t.325.212l3.6 3.6q.3.3.288.7t-.288.7q-.3.3-.712.313t-.713-.288L13 7.85V15q0 .425-.288.713T12 16t-.712-.288T11 15z" />
+                                    </svg> Upload Kegiatan Akhir</a></div>
+                        </li>
                     </ul>
                 </div>
-                <div class="notification">
+                <!--<div class="notification">
                     <span class="icon">❗</span> Tinjau kembali data PKL untuk detail lebih lanjut
                 </div> -->
             </section>
         </main>
     </div>
-    <div class="notification-circle" onclick="toggleNotificationList()">
-        <span class="exclamation">!</span>
-        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
-            <path d="M480-680q17 0 28.5-11.5T520-720q0-17-11.5-28.5T480-760q-17 0-28.5 11.5T440-720q0 17 11.5 28.5T480-680Zm-40 320h80v-240h-80v240ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
-        </svg>
-    </div>
 
-    <div class="notification-list" id="notificationList">
-        <div class="notification-item">🔔 New message from Admin</div>
-        <div class="notification-item">📢 School event on Friday</div>
-        <div class="notification-item">✅ Assignment marked complete</div>
-    </div>
 </body>
 
 </html>
@@ -133,6 +177,13 @@ $pkl_data = $query->fetch_assoc();
 <script>
     function toggleNotificationList() {
         const list = document.getElementById("notificationList");
-        list.style.display = list.style.display === "flex" ? "none" : "flex";
+        list.style.display = list.style.display === "block" ? "none" : "block";
     }
+    document.addEventListener('click', function(event) {
+        const notif = document.querySelector('.notification-wrapper');
+        const notifList = document.getElementById('notificationList');
+        if (!notif.contains(event.target)) {
+            notifList.style.display = 'none';
+        }
+    });
 </script>

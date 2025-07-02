@@ -18,6 +18,18 @@ body {
     flex-direction: column;
     align-items: flex-start;
     font-size: 25px;
+    overflow-y: auto;
+    /* biar bisa discroll kalau isi banyak */
+    z-index: 1000;
+    /* supaya di atas elemen lain */
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 95vh;
+    /* penuh tinggi layar */
+    width: 250px;
+    /* atau ukuran sesuai kebutuhan */
 }
 
 
@@ -25,13 +37,14 @@ body {
     margin-right: 10px;
     font-size: 40px;
 }
-.logo a{
+
+.logo a {
     text-decoration: none;
     font-size: 30px;
     font-weight: bold;
     color: #1A22D5;
     display: inline-flex;
-    align-items: center;    
+    align-items: center;
     margin: 20px;
 
 }
@@ -53,12 +66,13 @@ nav a {
     margin-top: 25px;
 }
 
-nav a:hover{
+nav a:hover {
     background-color: #859CFF;
     color: #FFFFFF;
     align-items: center;
 }
-nav a:hover svg{
+
+nav a:hover svg {
     fill: #FFFFFF;
 }
 
@@ -68,7 +82,8 @@ nav a.active {
     color: #FFFFFF;
     align-items: center;
 }
-nav a.active svg{
+
+nav a.active svg {
     fill: #FFFFFF;
 }
 
@@ -85,8 +100,8 @@ hr.separator {
 }
 
 
-.online-profile{
-    margin-top:auto;
+.online-profile {
+    margin-top: auto;
     font-size: 20px;
     padding: 10px;
 }
@@ -95,7 +110,7 @@ p {
     margin: 0px;
 }
 
-a.logout{
+a.logout {
     order: 1;
 }
 
@@ -121,6 +136,7 @@ a.logout{
 .main-content {
     flex-grow: 1;
     padding: 20px;
+    margin-left: 290px;
 }
 
 header {
@@ -204,15 +220,15 @@ header {
     padding: 0;
 }
 
-.tasks li a{
+.tasks li a {
     display: flex;
     align-items: center;
     margin: 10px 0;
-        text-decoration: none;
+    text-decoration: none;
     color: #000000;
 }
 
-.tasks li svg{
+.tasks li svg {
     margin-right: 10px;
 }
 
@@ -221,71 +237,104 @@ header {
     margin-right: 10px;
 }
 
-.notification-wrapper{
-    position: relative; 
-    display: inline-block;
+
+
+/* Start Main-Content Admin CSS */
+
+table thead {
+    background-color: #426787;
+    color: #ffffff;
 }
 
-.notification {
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    margin-right: 35px;
-    cursor: pointer;
+table th {
+    padding: 10px;
+    text-align: left;
 }
 
-
-.notification .icon {
-    margin-right: 10px;
-    color: #ff9800;
-}
-
-.notification-list {
-    position: absolute;
-    right: 50%; 
-    margin-right: 10px; 
-    width: 400px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.popup-hapus {
     display: none;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    z-index: 1001;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
 }
 
-.notification-header{
-    padding: 15px;
-    font-size: 20px;
-    margin-bottom: 10px;
+.popup-hapus-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
 }
 
-.notification-item {
-    background-color: #ffffff;
-    padding: 15px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
+.popup-hapus-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-hapus-ya {
+    background-color: #e3342f;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
     border-radius: 8px;
-    margin: 10px 25px 20px 25px;
+    text-decoration: none;
+
+    width: 50px;
+    margin-left: 15px;
 }
 
-.notif-title {
+.btn-batal {
+    background-color: #6c757d;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 15px;
+    font-size: 16px;
+    width: 82px;
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    padding: 20px 30px;
+    border-radius: 10px;
+    color: white;
     font-weight: bold;
-    margin-bottom: 4px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    opacity: 1;
+    animation: fadeIn 0.4s ease-out;
+    font-size: 18px;
+    text-align: center;
+    min-width: 300px;
 }
 
-.notif-message {
-    font-style: italic;
-    color: #444;
-    margin-bottom: 8px;
+.popup.success {
+    background-color: #28a745; /* Hijau */
 }
 
-.notif-time {
-    font-size: 14px;
-    color: #777;
+.popup.error {
+    background-color: #dc3545; /* Merah */
 }
 
-.notification-item:hover {
-    background-color: #f9f9f9;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
 }

@@ -66,12 +66,13 @@ nav a {
     margin-top: 25px;
 }
 
-nav a:hover{
+nav a:hover {
     background-color: #859CFF;
     color: #FFFFFF;
     align-items: center;
 }
-nav a:hover svg{
+
+nav a:hover svg {
     fill: #FFFFFF;
 }
 
@@ -135,9 +136,7 @@ a.logout {
 .main-content {
     flex-grow: 1;
     padding: 20px;
-    margin-left: 289px;
-    /* beri ruang agar tidak tertutup sidebar */
-    padding: 20px;
+    margin-left: 290px;
 }
 
 header {
@@ -187,6 +186,12 @@ header {
     cursor: pointer;
     font-size: 25px;
     margin-right: 75px;
+}
+
+.dashboard h1 {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 5px;
 }
 
 .dashboard h2 {
@@ -299,96 +304,305 @@ header {
     background-color: #f9f9f9;
 }
 
-.profile-header {
+.success-message {
+    background-color: #d4edda;
+    padding: 10px;
+    color: #155724;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+}
+
+.popup {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 500px;
+    font-size: 18px;
+}
+
+.popup-title {
+    font-weight: bold;
+    color: #0DAE17;
+    font-size: 23px;
+    margin-top: 20px;
+    letter-spacing: 1px;
+}
+
+.popup-subtitle {
+    color: #666666;
+    letter-spacing: 1px;
+}
+
+.popup button {
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    background-color: #859CFF;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 149px;
+    height: 50px;
+    font-size: 22px;
+}
+
+/* =================== FORM ISI DATA PKL =================== */
+
+.profile-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.profile-form h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    border-left: 4px solid #007BFF;
+    padding-left: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 1.5rem;
 }
 
-.profile-card {
-    background-color: #fff;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid #eee;
-    margin-left: 50px;
-    margin-right: 100px;
-    font-size: 20px;
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
 }
 
-.profile-value {
-    padding: 10px 12px;
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 1rem;
     background-color: #f9f9f9;
-    font-size: 18px;
-    color: #555;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    transition: border-color 0.3s ease;
 }
 
-.edit {
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #007BFF;
+    background-color: #fff;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.form-actions {
     display: flex;
     justify-content: flex-end;
 }
 
-.edit-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #1E1E9E;
+.save-btn {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px 24px;
     border: none;
-    border-radius: 15px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
-    text-align: center;
-    border: 1px solid #000000;
-    display: flex;
-    align-items: flex-end;
-    margin-right: 100px;
+    transition: background-color 0.3s ease;
 }
 
-.edit-btn:hover {
-    background-color: #1E1E9E;
-    color: #FFFFFF;
+.save-btn:hover {
+    background-color: #0056b3;
+}
+
+
+.success-message {
+    background-color: #d4edda;
+    padding: 10px;
+    color: #155724;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    padding: 20px 30px;
+    background-color: #fff;
+    padding: 30px;
     border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    opacity: 1;
-    animation: fadeIn 0.4s ease-out;
-    font-size: 18px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     text-align: center;
-    min-width: 300px;
+    width: 500px;
+    font-size: 18px;
 }
 
-.popup.success {
-    background-color: #28a745; /* Hijau */
+.popup-title {
+    font-weight: bold;
+    color: #0DAE17;
+    font-size: 23px;
+    margin-top: 20px;
+    letter-spacing: 1px;
 }
 
-.popup.error {
-    background-color: #dc3545; /* Merah */
+.popup-subtitle {
+    color: #666666;
+    letter-spacing: 1px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -60%);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
+.popup button {
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    background-color: #859CFF;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 149px;
+    height: 50px;
+    font-size: 22px;
+}
+
+/* =================== FORM ISI DATA PKL =================== */
+
+.profile-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.profile-form h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    border-left: 4px solid #007BFF;
+    padding-left: 10px;
+}
+
+
+
+textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+}
+
+
+.drpdown-prodi {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-position: right 10px center;
+    background-size: 10px;
+    transition: border-color 0.3s ease;
+}
+
+/* Fullscreen Overlay */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+}
+
+/* Centered Popup Box */
+.popup-content {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 25px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+/* Close Button (X) */
+.close-popup {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+}
+
+.close-popup:hover {
+    color: #333;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.data-table td {
+    padding: 4px 8px;
+    vertical-align: top;
+}
+
+.data-table td:first-child {
+    width: 160px;
+    font-weight: 500;
+}
+
+.data-table td:nth-child(2) {
+    width: 10px;
+    text-align: center;
+}
+
+.data-table td:nth-child(3) {
+    color: #444;
 }

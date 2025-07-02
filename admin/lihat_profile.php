@@ -8,9 +8,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Chek if Role = 'mahasiswa'
-if ($_SESSION['role'] !== 'mahasiswa') {
-    echo "Akses ditolak. Halaman ini hanya untuk mahasiswa.";
+// Chek if Role = 'admin'
+if ($_SESSION['role'] !== 'admin') {
+    echo "Akses ditolak. Halaman ini hanya untuk admin.";
     exit();
 }
 
@@ -67,15 +67,15 @@ $prodi = ($user['prodi'] ?? '-');
                 <a href="dashboard.php"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000" alttext="Logo Home">
                         <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
                     </svg> Dashboard</a>
-                <a href="isidata.php"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000" alttext="Logo Isi Data">
+                <a href="kelolamahasiswa.php"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000" alttext="Logo Isi Data">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37ZM580-140h38l121-122-37-37-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-                    </svg> Isi Data PKL</a>
-                <a href="kegiatan.php"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Kegiatan PKL">
+                    </svg> Mengelola<br>Mahasiswa</a>
+                <a href="keloladosen.php"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Kegiatan PKL">
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560h-80v120H280v-120h-80v560Zm280-560q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z" />
-                    </svg> Kegiatan PKL</a>
-                <a href="laporanakhir.php"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Laporan Akhir">
+                    </svg> Mengelola<br>Dosen</a>
+                <a href="logaktivitas.php"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Laporan Akhir">
                         <path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z" />
-                    </svg> Laporan Akhir</a>
+                    </svg> Log Aktivitas</a>
             </nav>
             <div class="online-profile">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
@@ -91,33 +91,17 @@ $prodi = ($user['prodi'] ?? '-');
         </aside>
         <main class="main-content">
             <header>
-                <div class="notification-wrapper">
-                    <div class="notification" onclick="toggleNotificationList()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 512 512">
-                            <path fill="#000" d="M440.08 341.31c-1.66-2-3.29-4-4.89-5.93c-22-26.61-35.31-42.67-35.31-118c0-39-9.33-71-27.72-95c-13.56-17.73-31.89-31.18-56.05-41.12a3 3 0 0 1-.82-.67C306.6 51.49 282.82 32 256 32s-50.59 19.49-59.28 48.56a3.1 3.1 0 0 1-.81.65c-56.38 23.21-83.78 67.74-83.78 136.14c0 75.36-13.29 91.42-35.31 118c-1.6 1.93-3.23 3.89-4.89 5.93a35.16 35.16 0 0 0-4.65 37.62c6.17 13 19.32 21.07 34.33 21.07H410.5c14.94 0 28-8.06 34.19-21a35.17 35.17 0 0 0-4.61-37.66M256 480a80.06 80.06 0 0 0 70.44-42.13a4 4 0 0 0-3.54-5.87H189.12a4 4 0 0 0-3.55 5.87A80.06 80.06 0 0 0 256 480" />
-                        </svg>
-                    </div>
-
-                    <div class="notification-list" id="notificationList">
-                        <div class="notification-header">Notifikasi</div>
-                        <div class="notification-item">
-                            <p class="notif-title">Notifikasi baru</p>
-                            <p class="notif-message"><i>“Segera upload kegiatan mingguan Anda”</i></p>
-                            <p class="notif-time">20 Juni 2025, 15:34</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="dropdown">
                     <button class="dropbtn"><?php echo $user['nama_lengkap'] ?> ▼</button>
                     <div class="dropdown-content">
-                        <a href="lihatprofile.php">Lihat Profile</a>
+                        <a href="lihat_profile.php">Lihat Profile</a>
                     </div>
                 </div>
             </header>
             <section class="dashboard">
                 <hr class="separator">
                 <h2>Profil Saya</h2>
-                <div class="edit">
+                <!-- <div class="edit">
                     <a href="editprofile.php" class="edit-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#1E1E9E">
                             <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -127,7 +111,7 @@ $prodi = ($user['prodi'] ?? '-');
                         </svg>
                         Edit profile
                     </a>
-                </div>
+                </div> -->
                 <div class="profile-card">
                     <div class="profile-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" viewBox="0 0 48 48">
@@ -144,23 +128,18 @@ $prodi = ($user['prodi'] ?? '-');
                     </div>
 
                     <div class="profile-item">
-                        <label>NIM</label>
+                        <label>NIP</label>
                         <div class="profile-value"><?= safe($user['nim']); ?></div>
-                    </div>
-
-                    <div class="profile-item">
-                        <label>Program Studi</label>
-                        <div class="profile-value"><?= safe($prodi); ?></div>
-                    </div>
-
-                    <div class="profile-item">
-                        <label>No. Telepon</label>
-                        <div class="profile-value"><?= safe($no_telp); ?></div>
                     </div>
 
                     <div class="profile-item">
                         <label>Email</label>
                         <div class="profile-value"><?= safe($user['email']); ?></div>
+                    </div>
+
+                    <div class="profile-item">
+                        <label>No. Telepon</label>
+                        <div class="profile-value"><?= safe($no_telp); ?></div>
                     </div>
 
                 </div>
@@ -200,10 +179,10 @@ $prodi = ($user['prodi'] ?? '-');
         list.style.display = list.style.display === "block" ? "none" : "block";
     }
     document.addEventListener('click', function(event) {
-    const notif = document.querySelector('.notification-wrapper');
-    const notifList = document.getElementById('notificationList');
-    if (!notif.contains(event.target)) {
-        notifList.style.display = 'none';
-    }
-});
+        const notif = document.querySelector('.notification-wrapper');
+        const notifList = document.getElementById('notificationList');
+        if (!notif.contains(event.target)) {
+            notifList.style.display = 'none';
+        }
+    });
 </script>

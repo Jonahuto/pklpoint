@@ -13,37 +13,73 @@ if ($_SESSION['role'] !== 'mahasiswa') {
     echo "Akses ditolak. Halaman ini hanya untuk mahasiswa.";
     exit();
 }
+
 $user_id = $_SESSION['user_id'];
 
-$query = $conn->prepare("SELECT * FROM laporan_akhir WHERE id_user = ? ORDER BY tanggal DESC");
-$query->bind_param("i", $user_id);
-$query->execute();
-$result = $query->get_result();
-$laporan_data = [];
-while ($row = $result->fetch_assoc()) {
-    $laporan_data[] = $row;
-}
-
-$user = $conn->query("SELECT * FROM users WHERE user_id = $user_id")->fetch_assoc();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $judul = $_POST['judul_laporan_akhir'];
-    $tanggal = date('Y-m-d');
-    $file_name = '';
-
-    if (!empty($_FILES['file']['name'])) {
-        $file_name = basename($_FILES['file']['name']);
-        $target = __DIR__ . "/uploads/" . $file_name;
-        move_uploaded_file($_FILES['file']['tmp_name'], $target);
-    }
-
-    $stmt = $conn->prepare("INSERT INTO laporan_akhir (id_user, judul_laporan_akhir, file, tanggal) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("isss", $user_id, $judul, $file_name, $tanggal);
-    $stmt->execute();
-
-    header("Location: laporanakhir.php");
+if (!isset($_GET['id'])) {
+    echo "ID kegiatan tidak ditemukan.";
     exit();
 }
+
+$id_kegiatan = intval($_GET['id']);
+
+// Ambil data kegiatan untuk ditampilkan
+$stmt = $conn->prepare("SELECT * FROM kegiatan WHERE id_kegiatan = ? AND id_user = ?");
+$stmt->bind_param("ii", $id_kegiatan, $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$kegiatan = $result->fetch_assoc();
+
+if (!$kegiatan) {
+    echo "Data kegiatan tidak ditemukan.";
+    exit();
+}
+
+// Proses update saat form disubmit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama_kegiatan = $_POST['nama_kegiatan'];
+    $minggu = $_POST['minggu'];
+
+    // Cek apakah ada file baru diupload
+    if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
+        $upload_dir = 'uploads/';
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
+        $file_tmp = $_FILES['file']['tmp_name'];
+        $file_name = basename($_FILES['file']['name']);
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
+        $new_file_name = uniqid('kegiatan_', true) . '.' . $file_ext;
+        $destination = $upload_dir . $new_file_name;
+
+        if (move_uploaded_file($file_tmp, $destination)) {
+            // Hapus file lama jika ada
+            if (!empty($kegiatan['file']) && file_exists("uploads/" . $kegiatan['file'])) {
+                unlink("uploads/" . $kegiatan['file']);
+            }
+
+            $stmt = $conn->prepare("UPDATE kegiatan SET nama_kegiatan = ?, minggu = ?, file = ? WHERE id_kegiatan = ? AND id_user = ?");
+            $stmt->bind_param("sssii", $nama_kegiatan, $minggu, $new_file_name, $id_kegiatan, $user_id);
+        } else {
+            echo "<script>alert('Gagal mengunggah file baru.');</script>";
+            exit();
+        }
+    } else {
+        // Update tanpa ganti file
+        $stmt = $conn->prepare("UPDATE kegiatan SET nama_kegiatan = ?, minggu = ? WHERE id_kegiatan = ? AND id_user = ?");
+        $stmt->bind_param("ssii", $nama_kegiatan, $minggu, $id_kegiatan, $user_id);
+    }
+
+    if ($stmt->execute()) {
+        header("Location: kegiatan.php");
+        exit();
+    } else {
+        echo "Gagal memperbarui data.";
+    }
+}
+
+
 
 
 $query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
@@ -60,7 +96,7 @@ $pkl_data = $query->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PKL Point Dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="../css/mhs/laporanakhir.css">
+    <link rel="stylesheet" href="../css/mhs/edit_kegiatan.css">
 </head>
 
 <body>
@@ -85,7 +121,7 @@ $pkl_data = $query->fetch_assoc();
                 <a href="kegiatan.php"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Kegiatan PKL">
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560h-80v120H280v-120h-80v560Zm280-560q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z" />
                     </svg> Kegiatan PKL</a>
-                <a href="laporanakhir.php" class="active"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Laporan Akhir">
+                <a href="laporanakhir.php"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" alttext="Logo Laporan Akhir">
                         <path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z" />
                     </svg> Laporan Akhir</a>
             </nav>
@@ -128,76 +164,25 @@ $pkl_data = $query->fetch_assoc();
             </header>
             <section class="dashboard">
                 <hr class="separator">
-                <div class="section-laporan-akhir">
-                    <h3>Upload Laporan Akhir PKL</h3>
-                    <button class="tambah-laporan"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="#fff" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
-                        </svg> Tambah Laporan</button>
+                <h2>Edit Kegiatan PKL</h2>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <label for="nama_kegiatan">Nama Kegiatan:</label><br>
+                    <input type="text" name="nama_kegiatan" value="<?= htmlspecialchars($kegiatan['nama_kegiatan']) ?>" required><br><br>
 
-                    <table border="1" cellpadding="10" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Judul Laporan Akhir</th>
-                                <th>File</th>
-                                <th>Tanggal</th>
-                                <th>Komentar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $no = 1;
-                            foreach ($laporan_data as $laporan): ?>
-                                <tr>
-                                    <td><?= $no++ ?></td>
-                                    <td><?= htmlspecialchars($laporan['judul_laporan_akhir']) ?></td>
-                                    <td>
-                                        <?php if (!empty($laporan['file'])): ?>
-                                            <a href="uploads/<?= $laporan['file'] ?>" target="_blank">Lihat File</a>
-                                        <?php else: ?>
-                                            Tidak ada file
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?= date('d M Y', strtotime($laporan['tanggal'])) ?></td>
-                                    <td><?= $laporan['komentar'] ?? '-' ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                    <label for="minggu">Minggu ke-:</label><br>
+                    <input type="number" name="minggu" value="<?= $kegiatan['minggu'] ?>" min="1" required><br><br>
+
+                    <label for="file">File (Opsional jika ingin ganti):</label><br>
+                    <input type="file" name="file"><br>
+                    <small>File sebelumnya: <?= $kegiatan['file'] ?></small><br><br>
+
+                    <button type="submit">Simpan Perubahan</button>
+                    <a class="batal-edit" href="kegiatan.php">Batal</a>
+                </form>
             </section>
-
-
-            <!-- ✅ Popup Form Tambah -->
-            <div class="popup-tambah-laporan" id="popupTambahLaporan" style="display:none;">
-                <div class="form-content">
-                    <h3>Tambah Laporan Akhir</h3>
-                    <form action="laporanakhir.php" method="POST" enctype="multipart/form-data">
-                        <label>Judul Laporan Akhir:</label>
-                        <input type="text" name="judul_laporan_akhir" required>
-
-                        <label>Upload File:</label>
-                        <input type="file" name="file" required>
-
-                        <div class="form-buttons">
-                            <button type="button" onclick="closeForm()">Batal</button>
-                            <button type="submit">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
         </main>
     </div>
 </body>
-<script>
-    document.querySelector('.tambah-laporan').addEventListener('click', () => {
-        document.getElementById('popupTambahLaporan').style.display = 'flex';
-    });
-
-    function closeForm() {
-        document.getElementById('popupTambahLaporan').style.display = 'none';
-    }
-</script>
 
 </html>
 
@@ -213,4 +198,11 @@ $pkl_data = $query->fetch_assoc();
             notifList.style.display = 'none';
         }
     });
+    document.querySelector('.tambah-kegiatan').addEventListener('click', function() {
+        document.getElementById('popupTambahKegiatan').style.display = 'flex';
+    });
+
+    function closeForm() {
+        document.getElementById('popupTambahKegiatan').style.display = 'none';
+    }
 </script>

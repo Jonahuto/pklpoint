@@ -221,71 +221,36 @@ header {
     margin-right: 10px;
 }
 
-.notification-wrapper{
-    position: relative; 
-    display: inline-block;
-}
+/* Start Main-Content Admin CSS */
 
-.notification {
-    border-radius: 10px;
+.dashboard-card{
     display: flex;
-    align-items: center;
-    margin-right: 35px;
-    cursor: pointer;
 }
 
-
-.notification .icon {
-    margin-right: 10px;
-    color: #ff9800;
+.jumlah-mahasiswa-card,
+.jumlah-dosen-card{
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 10px 15px 10px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+    width: 220px;
+    margin: 20px;
 }
 
-.notification-list {
-    position: absolute;
-    right: 50%; 
-    margin-right: 10px; 
-    width: 400px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    z-index: 1001;
-}
-
-.notification-header{
-    padding: 15px;
+.jumlah-mahasiswa-title,
+.jumlah-dosen-title{
+    display: flex;
+    justify-content: space-between;
     font-size: 20px;
+    font-weight: 600;
     margin-bottom: 10px;
 }
 
-.notification-item {
-    background-color: #ffffff;
-    padding: 15px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    border-radius: 8px;
-    margin: 10px 25px 20px 25px;
-}
-
-.notif-title {
+.jumlah-mahasiswa-card p,
+.jumlah-dosen-card p {
+    font-size: 28px;
     font-weight: bold;
-    margin-bottom: 4px;
+    color: #7c7b7b;
 }
 
-.notif-message {
-    font-style: italic;
-    color: #444;
-    margin-bottom: 8px;
-}
-
-.notif-time {
-    font-size: 14px;
-    color: #777;
-}
-
-.notification-item:hover {
-    background-color: #f9f9f9;
-}

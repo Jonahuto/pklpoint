@@ -18,6 +18,18 @@ body {
     flex-direction: column;
     align-items: flex-start;
     font-size: 25px;
+    overflow-y: auto;
+    /* biar bisa discroll kalau isi banyak */
+    z-index: 1000;
+    /* supaya di atas elemen lain */
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 95vh;
+    /* penuh tinggi layar */
+    width: 250px;
+    /* atau ukuran sesuai kebutuhan */
 }
 
 
@@ -25,13 +37,14 @@ body {
     margin-right: 10px;
     font-size: 40px;
 }
-.logo a{
+
+.logo a {
     text-decoration: none;
     font-size: 30px;
     font-weight: bold;
     color: #1A22D5;
     display: inline-flex;
-    align-items: center;    
+    align-items: center;
     margin: 20px;
 
 }
@@ -53,12 +66,13 @@ nav a {
     margin-top: 25px;
 }
 
-nav a:hover{
+nav a:hover {
     background-color: #859CFF;
     color: #FFFFFF;
     align-items: center;
 }
-nav a:hover svg{
+
+nav a:hover svg {
     fill: #FFFFFF;
 }
 
@@ -68,7 +82,8 @@ nav a.active {
     color: #FFFFFF;
     align-items: center;
 }
-nav a.active svg{
+
+nav a.active svg {
     fill: #FFFFFF;
 }
 
@@ -85,8 +100,8 @@ hr.separator {
 }
 
 
-.online-profile{
-    margin-top:auto;
+.online-profile {
+    margin-top: auto;
     font-size: 20px;
     padding: 10px;
 }
@@ -95,7 +110,7 @@ p {
     margin: 0px;
 }
 
-a.logout{
+a.logout {
     order: 1;
 }
 
@@ -121,6 +136,7 @@ a.logout{
 .main-content {
     flex-grow: 1;
     padding: 20px;
+    margin-left: 290px;
 }
 
 header {
@@ -204,15 +220,15 @@ header {
     padding: 0;
 }
 
-.tasks li a{
+.tasks li a {
     display: flex;
     align-items: center;
     margin: 10px 0;
-        text-decoration: none;
+    text-decoration: none;
     color: #000000;
 }
 
-.tasks li svg{
+.tasks li svg {
     margin-right: 10px;
 }
 
@@ -222,7 +238,7 @@ header {
 }
 
 .notification-wrapper{
-    position: relative; 
+    position: relative;
     display: inline-block;
 }
 
@@ -253,6 +269,7 @@ header {
     overflow: hidden;
     border: 1px solid #ddd;
     z-index: 1001;
+
 }
 
 .notification-header{
@@ -288,4 +305,165 @@ header {
 
 .notification-item:hover {
     background-color: #f9f9f9;
+}
+
+.section-upload {
+    background-color: #ffffff;
+    padding: 5px 10px 10px 15px;
+    border-radius: 20px;
+}
+
+.section-upload .tambah-kegiatan {
+    background-color: #230CFF;
+    border-radius: 7px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.section-upload table thead {
+    background-color: #426787;
+    color: #ffffff;
+}
+
+table th {
+    padding: 10px;
+    text-align: left;
+}
+
+.popup-tambah-kegiatan {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-tambah-kegiatan .form-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.popup-tambah-kegiatan h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.popup-tambah-kegiatan input,
+.popup-tambah-kegiatan select {
+    width: 100%;
+    margin: 8px 0 16px 0;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.form-buttons {
+    display: flex;
+}
+
+.gagal-tambah-kegiatan {
+    background-color: #F0080C;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    margin-right: 25px;
+    border-radius: 8px;
+    width: 80px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.kegiatan-tambah {
+    background-color: #0DAE17;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 8px;
+    width: 80px;
+    height: 35px;
+    cursor: pointer;
+}
+
+td .aksi-edit,
+td .aksi-hapus {
+    text-decoration: none;
+
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+small {
+    display: block;
+    margin-top: -15px;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 13px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.batal-edit {
+    display: inline-block;
+    margin-left: 15px;
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+}
+
+.batal-edit:hover {
+    text-decoration: underline;
+    color: #000;
 }

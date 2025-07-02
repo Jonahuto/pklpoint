@@ -13,39 +13,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
     $konfirmasi_password = trim($_POST['konfirmasi_password']);
 
-    // Validate NIM and Password
-    if (empty($nama_lengkap) || empty($nim) || empty($email) ||  empty($password) || empty($konfirmasi_password)) {
-        echo "Nama Lengkap, NIM, E-Mail, Password, dan Konfirmasi Password tidak boleh kosong!";
+    // Validate required fields
+    if (empty($nama_lengkap) || empty($nim) || empty($email) || empty($password) || empty($konfirmasi_password)) {
+        $error = "Nama Lengkap, NIM, E-Mail, Password, dan Konfirmasi Password tidak boleh kosong!";
     } elseif ($password !== $konfirmasi_password) {
         $error = "Password dan Konfirmasi Password tidak cocok!";
     } else {
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        // Cek apakah NIM sudah terdaftar
+        $sql_cek_nim = "SELECT user_id FROM users WHERE nim = ?";
+        $stmt_cek = $conn->prepare($sql_cek_nim);
+        $stmt_cek->bind_param("s", $nim);
+        $stmt_cek->execute();
+        $stmt_cek->store_result();
 
-        // Prepare SQL statement
-        $sql = "INSERT INTO users (nama_lengkap, nim, email,  password) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-
-        if ($stmt) {
-            // Bind parameters
-            $stmt->bind_param("ssss", $nama_lengkap, $nim, $email, $hashedPassword);
-
-            // Execute the statement
-            if ($stmt->execute()) {
-                header("Location: login.php");
-                exit();
-            } else {
-                echo "Error: " . $stmt->error;
-            }
-            $stmt->close();
+        if ($stmt_cek->num_rows > 0) {
+            $error = "NIM sudah terdaftar. Silakan gunakan NIM lain.";
         } else {
-            echo "Error preparing statement: " . $conn->error;
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // Prepare insert statement
+            $sql = "INSERT INTO users (nama_lengkap, nim, email, password) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+
+            if ($stmt) {
+                $stmt->bind_param("ssss", $nama_lengkap, $nim, $email, $hashedPassword);
+
+                if ($stmt->execute()) {
+                    $user_id = $stmt->insert_id;
+
+                    // Insert default activity status
+                    $sql_log = "INSERT INTO log_aktivitas (user_id, status) VALUES (?, 'Tidak Aktif')";
+                    $stmt_log = $conn->prepare($sql_log);
+                    $stmt_log->bind_param("i", $user_id);
+                    $stmt_log->execute();
+                    $stmt_log->close();
+
+                    header("Location: login.php");
+                    exit();
+                } else {
+                    $error = "Gagal mendaftarkan akun: " . $stmt->error;
+                }
+                $stmt->close();
+            } else {
+                $error = "Gagal menyiapkan statement: " . $conn->error;
+            }
         }
+
+        $stmt_cek->close();
     }
 }
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,12 +89,15 @@ $conn->close();
     <main>
         <section class="register-card" aria-label="Form Register PKLPoint">
             <h2>Daftar</h2>
-            <form class="register-form" action="register.php" method="POST" autocomplete="off" novalidate>
+            <?php if (!empty($error)): ?>
+                <div style="color: red; margin-bottom: 10px;"><?php echo $error; ?></div>
+            <?php endif; ?>
+            <form class="register-form" action="register.php" method="POST" autocomplete="off">
                 <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" aria-label="Nama Lengkap" required />
-                <input type="text" name="nim" placeholder="NIM" aria-label="NIM" required />
-                <input type="text" name="email" placeholder="E-Mail" aria-label="E-Mail" required />
-                <input type="password" name="password" placeholder="Password" aria-label="Password">
-                <input type="password" name="konfirmasi_password" placeholder="Konfirmasi Password" aria-label="Konfirmasi Password">
+                <input type="text" name="nim" placeholder="NIM" pattern="[0-9]+" aria-label="NIM" title="NIM hanya boleh angka" required />
+                <input type="email" name="email" placeholder="E-Mail" aria-label="E-Mail" required />
+                <input type="password" name="password" placeholder="Password" aria-label="Password" required>
+                <input type="password" name="konfirmasi_password" placeholder="Konfirmasi Password" aria-label="Konfirmasi Password" required>
                 <button type="submit">Buat Akun</button>
             </form>
             <p class="signup-text">

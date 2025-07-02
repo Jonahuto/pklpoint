@@ -24,21 +24,21 @@ if (isset($_POST['update'])) {
     // Update tabel users
     $update_users = $conn->query("UPDATE users SET nama_lengkap = '$nama_lengkap', email = '$email' WHERE user_id = $user_id");
 
-    $cek = $conn->query("SELECT * FROM pkl_data WHERE user_id = $user_id");
+    $cek = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
 
     if ($cek->num_rows > 0) {
         // Jika data sudah ada, lakukan UPDATE
-        $update_pkl = $conn->query("UPDATE pkl_data SET prodi='$prodi', no_telp='$no_telp' WHERE user_id=$user_id");
-    } else {
-        // Jika belum ada, lakukan INSERT
-        $update_pkl = $conn->query("INSERT INTO pkl_data (user_id, prodi, no_telp) VALUES ($user_id, '$prodi', '$no_telp')");
-    }   
+        $update_pkl = $conn->query("UPDATE users SET prodi='$prodi', no_telp='$no_telp' WHERE user_id=$user_id");
+    }
 
     if ($update_users && $update_pkl) {
-        echo "<script>alert('Profil berhasil diperbarui.'); window.location.href='lihatprofile.php';</script>";
+        header("Location: lihatprofile.php?success=1");
+  
         exit();
     } else {
-        echo "<script>alert('Gagal memperbarui profil.');</script>";
+        header("Location: editprofile.php?gagal=1");
+
+        exit();
     }
 }
 
@@ -52,11 +52,9 @@ function safe($value)
 $query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
 $user = $query->fetch_assoc();
 
-$query = $conn->query("SELECT * FROM pkl_data WHERE user_id = $user_id");
-$pkl_data = $query->fetch_assoc();
 
-$no_telp = $pkl_data['no_telp'] ?? '';
-$prodi = $pkl_data['prodi'] ?? '';
+$no_telp = $user['no_telp'] ?? '';
+$prodi = $user['prodi'] ?? '';
 ?>
 
 
@@ -72,6 +70,15 @@ $prodi = $pkl_data['prodi'] ?? '';
 </head>
 
 <body>
+        <?php if (isset($_GET['success'])): ?>
+        <div id="success-message" class="popup-message show">
+            Profil berhasil diperbarui.
+        </div>
+    <?php elseif (isset($_GET['gagal'])): ?>
+        <div id="gagal-message" class="popup-message show">
+            Gagal memperbarui profil.
+        </div>
+    <?php endif; ?>
     <div class="container">
         <aside class="sidebar">
             <div class="logo">
@@ -111,6 +118,22 @@ $prodi = $pkl_data['prodi'] ?? '';
         </aside>
         <main class="main-content">
             <header>
+                <div class="notification-wrapper">
+                    <div class="notification" onclick="toggleNotificationList()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 512 512">
+                            <path fill="#000" d="M440.08 341.31c-1.66-2-3.29-4-4.89-5.93c-22-26.61-35.31-42.67-35.31-118c0-39-9.33-71-27.72-95c-13.56-17.73-31.89-31.18-56.05-41.12a3 3 0 0 1-.82-.67C306.6 51.49 282.82 32 256 32s-50.59 19.49-59.28 48.56a3.1 3.1 0 0 1-.81.65c-56.38 23.21-83.78 67.74-83.78 136.14c0 75.36-13.29 91.42-35.31 118c-1.6 1.93-3.23 3.89-4.89 5.93a35.16 35.16 0 0 0-4.65 37.62c6.17 13 19.32 21.07 34.33 21.07H410.5c14.94 0 28-8.06 34.19-21a35.17 35.17 0 0 0-4.61-37.66M256 480a80.06 80.06 0 0 0 70.44-42.13a4 4 0 0 0-3.54-5.87H189.12a4 4 0 0 0-3.55 5.87A80.06 80.06 0 0 0 256 480" />
+                        </svg>
+                    </div>
+
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-header">Notifikasi</div>
+                        <div class="notification-item">
+                            <p class="notif-title">Notifikasi baru</p>
+                            <p class="notif-message"><i>“Segera upload kegiatan mingguan Anda”</i></p>
+                            <p class="notif-time">20 Juni 2025, 15:34</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="dropdown">
                     <button class="dropbtn"><?php echo $user['nama_lengkap'] ?> ▼</button>
                     <div class="dropdown-content">
@@ -125,7 +148,7 @@ $prodi = $pkl_data['prodi'] ?? '';
                 <form action="editprofile.php" method="POST" class="profile-form">
                     <div class="form-group">
                         <label for="nama_lengkap">Nama Lengkap</label>
-                        <input type="text" id="nama_lengkap" name="nama_lengkap" value="<?= htmlspecialchars($user['nama_lengkap']) ?>" required>
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" value="<?= htmlspecialchars($user['nama_lengkap']) ?>" readonly>
                     </div>
 
                     <div class="form-group">
@@ -135,7 +158,7 @@ $prodi = $pkl_data['prodi'] ?? '';
 
                     <div class="form-group">
                         <label>Program Studi:</label>
-                        <select name="prodi" class="drpdown-prodi" required>
+                        <select name="prodi" class="drpdown-prodi" >
                             <option value="" <?= empty($prodi) ? 'selected' : '' ?>>-- Pilih Program Studi --</option>
                             <option value="Informatika" <?= $prodi == 'Informatika' ? 'selected' : '' ?>>Informatika</option>
                             <option value="Sistem Informasi" <?= $prodi == 'Sistem Informasi' ? 'selected' : '' ?>>Sistem Informasi</option>
@@ -147,12 +170,12 @@ $prodi = $pkl_data['prodi'] ?? '';
 
                     <div class="form-group">
                         <label for="no_telp">No. Telepon</label>
-                        <input type="text" id="no_telp" name="no_telp" value="<?= htmlspecialchars($no_telp) ?>">
+                        <input type="text" id="no_telp" name="no_telp" value="<?= htmlspecialchars($user['no_telp']) ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+                        <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" >
                     </div>
 
                     <div class="form-actions">
@@ -169,6 +192,22 @@ $prodi = $pkl_data['prodi'] ?? '';
 
     </div>
 
+
+
 </body>
 
 </html>
+
+<script>
+    function toggleNotificationList() {
+        const list = document.getElementById("notificationList");
+        list.style.display = list.style.display === "block" ? "none" : "block";
+    }
+    document.addEventListener('click', function(event) {
+    const notif = document.querySelector('.notification-wrapper');
+    const notifList = document.getElementById('notificationList');
+    if (!notif.contains(event.target)) {
+        notifList.style.display = 'none';
+    }
+});
+</script>
