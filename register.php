@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt_log->execute();
                     $stmt_log->close();
 
-                    header("Location: login.php");
+                    header("Location: login.php?=success=1");
                     exit();
                 } else {
                     $error = "Gagal mendaftarkan akun: " . $stmt->error;

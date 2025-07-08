@@ -125,6 +125,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+    <?php if (isset($_GET['success'])): ?>
+        <div id="success-register-message" class="popup success">
+            Berhasil mendaftar.
+        </div>
+    <?php endif; ?>
     <header>
         <div class="logo">
             <span class="material-icons" aria-hidden="true"><svg height="75" width="75" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
@@ -165,7 +170,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </a>
         </div>
     </footer> -->
+        <script>
+        // Tunggu sampai halaman benar-benar dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            const success = document.getElementById('success-register-message');
 
+            // Jika elemen success ada, tampilkan dan sembunyikan setelah 3 detik
+            if (success) {
+                success.classList.add('popup', 'success');
+                setTimeout(() => {
+                    success.style.display = 'none';
+                }, 1500);
+            }
+        });
+    </script>            
 </body>
 
 </html>

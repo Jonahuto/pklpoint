@@ -185,3 +185,34 @@ footer .social-links a:focus {
     font-size: 14px;
     color: red; /* Adjust color as necessary */
 }
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    padding: 20px 30px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    opacity: 1;
+    animation: fadeIn 0.4s ease-out;
+    font-size: 18px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.popup.success {
+    background-color: #28a745; /* Hijau */
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
